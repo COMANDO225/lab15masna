@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Proceso de Creación de Vuelo
 
-## Getting Started
+Este documento describe el flujo de trabajo que sigo para crear un vuelo en nuestra base de datos. Cada paso es esencial para asegurar que la información esté completa y sea coherente.
 
-First, run the development server:
+## Paso 1: Creación de Bases
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Primero, me aseguro de que nuestras bases operativas estén registradas en el sistema. Para cada nueva base, registro:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+-   **Nombre de la Base**: El nombre único que identifica la base.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Paso 2: Registro de Aviones
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Cada avión debe estar vinculado a una base, por lo que procedo a registrarlos con la siguiente información:
 
-## Learn More
+-   **Código del Avión**: Un identificador único para cada avión.
+-   **Tipo de Avión**: El modelo o tipo del avión.
+-   **Base**: Selecciono de la lista desplegable de bases existentes.
 
-To learn more about Next.js, take a look at the following resources:
+## Paso 3: Registro de Personal
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Antes de asignar roles específicos, agrego a todas las personas a nuestra base de datos con su:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+-   **Código de Persona**: Un código único que sirve como identificador.
+-   **Nombre Completo**: El nombre de la persona.
+-   **Base**: La base a la que están asignados, seleccionada de nuestras bases existentes.
 
-## Deploy on Vercel
+## Paso 4: Especificación de Roles
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Con las personas ya registradas, especifico si son pilotos o miembros de la tripulación:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Para Pilotos:
+
+-   Selecciono el código de persona correspondiente y confirmo su rol como piloto.
+
+### Para Miembros de la Tripulación:
+
+-   De igual forma, asigno a las personas como miembros de la tripulación utilizando su código de persona.
+
+## Paso 5: Creación de un Vuelo
+
+Con el personal y los aviones listos, creo un nuevo vuelo. Relleno los siguientes detalles:
+
+-   **Número de Vuelo**: Un identificador único para el vuelo.
+-   **Origen y Destino**: Los aeropuertos de salida y llegada.
+-   **Hora de Salida y Fecha**: La hora programada y la fecha del vuelo.
+-   **Avión**: El avión asignado, seleccionado de los disponibles.
+-   **Piloto**: El piloto designado para el vuelo.
+
+## Paso 6: Asignación de Tripulación
+
+Una vez que el vuelo está creado, asigno miembros de la tripulación, asegurándome de que cada vuelo tenga la dotación necesaria.
+
+## Paso 7: Registro de Regreso (Opcional)
+
+Si un piloto o miembro de la tripulación regresa a la base, registro su regreso para mantener un control de su ubicación.
+
+## Paso 8: Registro de Mantenimiento (Opcional)
+
+Finalmente, si se realiza mantenimiento al avión, registro este evento con la fecha y los detalles del mismo.
+
+Este flujo de trabajo me permite mantener un registro detallado y actualizado de todas las operaciones relacionadas con nuestros vuelos, asegurando la eficiencia y seguridad de nuestra aerolínea.

@@ -1,0 +1,106 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Persona {
+  id                 Int                 @id @default(autoincrement())
+  codigo             String              @unique
+  nombre             String
+  Piloto             Piloto?
+  MiembroTripulacion MiembroTripulacion?
+  regreso            Regreso? // esta relacion es uno a uno con regreso.
+  base               Base                @relation(fields: [baseId], references: [id])
+  baseId             Int
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+}
+
+model Piloto {
+  id            Int      @id @default(autoincrement())
+  codigoPersona String   @unique
+  Persona       Persona  @relation(fields: [codigoPersona], references: [codigo])
+  Vuelos        Vuelo[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model MiembroTripulacion {
+  codigoPersona    String             @unique
+  Persona          Persona            @relation(fields: [codigoPersona], references: [codigo])
+  TripulacionVuelo TripulacionVuelo[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Regreso {
+  id            Int      @id @default(autoincrement())
+  personaCodigo String   @unique
+  Persona       Persona  @relation(fields: [personaCodigo], references: [codigo])
+  baseId        Int
+  Base          Base     @relation(fields: [baseId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Base {
+  id        Int       @id @default(autoincrement())
+  nombre    String
+  Personas  Persona[]
+  Aviones   Avion[]
+  Regresos  Regreso[] // Una base puede tener multiples regresos.
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Avion {
+  id         Int        @id @default(autoincrement())
+  codigo     String     @unique
+  tipo       String
+  base       Base       @relation(fields: [baseId], references: [id])
+  baseId     Int
+  Vuelos     Vuelo[]
+  Revisiones Revision[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model Vuelo {
+  id                  Int                @id @default(autoincrement())
+  numeroVuelo         String             @unique
+  origen              String
+  destino             String
+  hora                DateTime
+  fecha               DateTime
+  Avion               Avion              @relation(fields: [avionCodigo], references: [codigo])
+  avionCodigo         String
+  Piloto              Piloto             @relation(fields: [pilotoCodigoPersona], references: [codigoPersona])
+  pilotoCodigoPersona String
+  TripulacionVuelo    TripulacionVuelo[]
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+}
+
+model TripulacionVuelo {
+  vuelo                           Vuelo              @relation(fields: [vueloId], references: [id])
+  vueloId                         Int
+  miembroTripulacion              MiembroTripulacion @relation(fields: [miembroTripulacionCodigoPersona], references: [codigoPersona])
+  miembroTripulacionCodigoPersona String
+
+  @@id([vueloId, miembroTripulacionCodigoPersona])
+}
+
+model Revision {
+  id          Int      @id @default(autoincrement())
+  Avion       Avion    @relation(fields: [avionCodigo], references: [codigo])
+  avionCodigo String
+  fecha       DateTime
+  detalles    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
